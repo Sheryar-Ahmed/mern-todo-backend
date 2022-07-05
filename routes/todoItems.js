@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 //import todo schema that we created 
 
@@ -18,9 +18,9 @@ router.post('/api/users', async (req, res) => {
             Email: req.body.Email,
             password: req.body.password
         })
-        const salt = await bcrypt.genSalt(10);
+        // const salt = await bcrypt.genSalt(10);
         //here we updating the user password to encryption so if our database is hacked then the hacker cannot have access to accounts.
-        user.password = await bcrypt.hash(user.password, salt);
+        // user.password = await bcrypt.hash(user.password, salt);
         //save the user form in the db
         const saveUser = await user.save();
         //let's suppose the user registered and we don't want him to login then we add token to the header.
@@ -40,7 +40,8 @@ router.post("/api/auth", async (req, res) => {
         if (!user) return res.status(400).json("Invalid Email or password");
 
         //we have a compare property in bcrypt which compares the current user password to the client.
-        const validatePass = await bcrypt.compare(req.body.password, user.password);
+        // const validatePass = await bcrypt.compare(req.body.password, user.password);
+        const validatePass = await (req.body.password === user.password) ? true : false;
         if (!validatePass) return res.status(400).json("Invalid Email or password");
 
         //generating the token is very neccessary.
